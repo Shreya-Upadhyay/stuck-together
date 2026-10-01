@@ -1,0 +1,9 @@
+{
+  "name": "stuck-together",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node dev-server.mjs",
+    "rules": "npx --yes firebase-tools deploy --only firestore"
+  }
+}

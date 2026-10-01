@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>a scrapbook ♡ stuck together</title>
+  <meta name="robots" content="noindex">
+  <meta name="referrer" content="no-referrer">
+  <meta name="theme-color" content="#EFE7DC">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%8E%80%3C/text%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Nunito:wght@600;700;800&family=Special+Elite&display=swap">
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="/app.css">
+</head>
+<body class="editing">
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+    <defs>
+      <pattern id="bw" width="7" height="7" patternUnits="userSpaceOnUse">
+        <rect width="7" height="7" fill="#F6F0E7"/><rect width="3.5" height="7" fill="#2B2522" opacity=".5"/><rect width="7" height="3.5" fill="#2B2522" opacity=".5"/>
+      </pattern>
+      <pattern id="rw" width="7" height="7" patternUnits="userSpaceOnUse">
+        <rect width="7" height="7" fill="#FAF3EE"/><rect width="3.5" height="7" fill="#C98E87" opacity=".55"/><rect width="7" height="3.5" fill="#C98E87" opacity=".55"/>
+      </pattern>
+    </defs>
+  </svg>
+
+  <header class="topbar">
+    <a class="wordmark" href="/">stuck together</a>
+    <div class="topbar-actions">
+      <button class="pill ghost" id="details-btn" hidden>cover</button>
+      <button class="pill ghost" id="add-page-btn" hidden>+ page</button>
+      <button class="pill primary" id="share-btn" hidden>friends</button>
+      <div class="account" id="account"></div>
+    </div>
+  </header>
+
+  <main class="stage">
+    <div class="status" id="status">
+      <p class="whisper">opening the scrapbook…</p>
+    </div>
+    <p class="whisper" id="whisper" hidden>click any words to change them ♡</p>
+    <div class="book-wrap" id="book-wrap" hidden>
+      <div id="book" class="book-theme"></div>
+      <div class="spiral" id="spiral" hidden></div>
+    </div>
+    <nav class="nav" id="nav" aria-label="Pages" hidden>
+      <button id="prev" aria-label="Previous page">&#8592;</button>
+      <span class="count" id="count" aria-live="polite"></span>
+      <button id="next" aria-label="Next page">&#8594;</button>
+    </nav>
+  </main>
+
+  <div class="dock" id="dock" hidden>
+    <div class="selbar" id="selbar" hidden></div>
+    <button class="pill primary" id="pouch" aria-expanded="false" aria-controls="sheet">
+      <svg width="16" height="16" viewBox="0 0 100 100" aria-hidden="true"><path d="M50 88 C22 68 8 52 9 33 C10 18 22 9 35 10 C43 11 48 16 50 22 C52 16 57 11 65 10 C78 9 90 18 91 33 C92 52 78 68 50 88Z" fill="currentColor"/></svg>
+      stickers
+    </button>
+  </div>
+
+  <!-- sticker pouch -->
+  <section class="sheet" id="sheet" hidden aria-label="Sticker pouch">
+    <div class="sheet-head">
+      <div class="tabs" role="tablist">
+        <button role="tab" data-tab="faces" aria-selected="true">photos</button>
+        <button role="tab" data-tab="doodles" aria-selected="false">doodles</button>
+        <button role="tab" data-tab="tape" aria-selected="false">tape</button>
+        <button role="tab" data-tab="words" aria-selected="false">words</button>
+      </div>
+      <button class="x" data-close aria-label="Close stickers">&times;</button>
+    </div>
+    <div id="sheet-body"></div>
+  </section>
+
+  <!-- add a page -->
+  <section class="sheet" id="add-sheet" hidden aria-label="Add a page">
+    <div class="sheet-head">
+      <h2 class="sheet-title">add a page</h2>
+      <button class="x" data-close aria-label="Close">&times;</button>
+    </div>
+    <div class="type-grid" id="type-grid"></div>
+    <div class="sheet-foot"><span>it goes after the page you're on</span></div>
+  </section>
+
+  <!-- the cover -->
+  <section class="sheet" id="details-sheet" hidden aria-label="Cover">
+    <div class="sheet-head">
+      <h2 class="sheet-title">the cover</h2>
+      <button class="x" data-close aria-label="Close">&times;</button>
+    </div>
+    <form class="form" id="details-form">
+      <label class="field" for="d-title">title <span class="hint">cut-out letters, up to 4 words</span>
+        <input id="d-title" maxlength="48" placeholder="happy birthday"></label>
+      <label class="field" for="d-name">the line under the title
+        <input id="d-name" maxlength="40" placeholder="for alex · may 2026 · the class of '26"></label>
+      <label class="field" for="d-date">date
+        <input id="d-date" maxlength="40" placeholder="october 2026"></label>
+      <label class="field" for="d-from">from
+        <input id="d-from" maxlength="60" placeholder="your friends"></label>
+      <fieldset class="field">
+        <legend>the paper</legend>
+        <div class="swatches" id="d-themes"></div>
+      </fieldset>
+      <button class="pill primary" type="submit">save</button>
+    </form>
+    <div class="sheet-section" id="danger-zone"></div>
+  </section>
+
+  <!-- friends -->
+  <section class="sheet" id="share-sheet" hidden aria-label="Friends">
+    <div class="sheet-head">
+      <h2 class="sheet-title">friends in this scrapbook</h2>
+      <button class="x" data-close aria-label="Close">&times;</button>
+    </div>
+    <ul class="members" id="members"></ul>
+    <div class="sheet-section">
+      <h3>invite someone</h3>
+      <p class="sheet-note">Send this link. They sign in, and they're in: they can see and change everything. Only send it to people you'd hand the real thing to.</p>
+      <div class="copy-row">
+        <input id="share-link" readonly aria-label="Invite link">
+        <button class="pill primary" id="copy-link">copy</button>
+      </div>
+      <div class="row-actions"><button class="pill" id="reset-link">make a new link</button></div>
+      <p class="form-note">making a new link turns off the old one. people already in stay in.</p>
+    </div>
+  </section>
+
+  <div class="popover" id="page-menu" hidden>
+    <button id="remove-page">remove this page</button>
+  </div>
+
+  <input type="file" id="photo-input" accept="image/*" hidden>
+  <div class="toast" id="toast" hidden></div>
+
+  <script src="/vendor/page-flip.browser.js"></script>
+  <script type="module" src="/js/book.js"></script>
+</body>
+</html>

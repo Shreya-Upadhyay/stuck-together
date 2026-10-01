@@ -1,0 +1,106 @@
+rules_version = '2';
+
+// Access model
+// - Everyone signs in (Google or an email link). users/{uid} holds the name and
+//   picture friends see.
+// - A book lists its members' uids. Only members can read or change it.
+// - To join, a signed-in person adds only themselves to `members`, and must present
+//   the book's current invite code (it's in the invite link). Resetting the code
+//   turns off old invite links.
+// - Any member can edit the book and remove themselves. Only the owner can remove
+//   other members or delete the book.
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() { return request.auth != null; }
+    function me() { return request.auth.uid; }
+    function shortText(v, n) { return v is string && v.size() <= n; }
+    function bookData(bookId) { return get(/databases/$(database)/documents/books/$(bookId)).data; }
+    function isMember(bookId) { return signedIn() && me() in bookData(bookId).members; }
+    // For writes: the book as it will be once this write (or batch) lands, so a new
+    // book and its first pages can be created together.
+    function isMemberAfter(bookId) { return signedIn() && me() in getAfter(/databases/$(database)/documents/books/$(bookId)).data.members; }
+    function validMeta(d) {
+      return shortText(d.title, 60) && shortText(d.name, 60) && shortText(d.date, 60) && shortText(d.from, 80)
+        && d.theme in ['kraft', 'blush', 'noir', 'sky', 'sage']
+        && d.inviteCode is string && d.inviteCode.size() >= 16
+        && d.members is list && d.members.size() <= 50;
+    }
+
+    match /users/{userId} {
+      allow get: if signedIn();
+      allow list: if false;
+      allow create, update: if signedIn() && me() == userId
+        && request.resource.data.keys().hasOnly(['name', 'photo', 'updatedAt'])
+        && shortText(request.resource.data.name, 60) && shortText(request.resource.data.photo, 2000);
+      allow delete: if false;
+    }
+
+    match /books/{bookId} {
+      // "My scrapbooks" queries must ask for books containing the reader.
+      allow get, list: if signedIn() && me() in resource.data.members;
+
+      allow create: if signedIn()
+        && bookId.matches('^[A-Za-z0-9]{20,40}$')
+        && request.resource.data.keys().hasOnly(['title', 'name', 'date', 'from', 'theme', 'owner', 'members', 'inviteCode', 'createdAt', 'kind'])
+        && (!('kind' in request.resource.data) || request.resource.data.kind in ['person', 'trip', 'year', 'us'])
+        && request.resource.data.owner == me()
+        && request.resource.data.members == [me()]
+        && validMeta(request.resource.data);
+
+      allow update: if signedIn() && validMeta(request.resource.data)
+        && request.resource.data.owner == resource.data.owner
+        && (memberEdit() || joining());
+
+      allow delete: if signedIn() && resource.data.owner == me();
+
+      function changed() { return request.resource.data.diff(resource.data).affectedKeys(); }
+      function newMembers() { return request.resource.data.members.toSet(); }
+      function oldMembers() { return resource.data.members.toSet(); }
+
+      function memberEdit() {
+        return me() in resource.data.members
+          && changed().hasOnly(['title', 'name', 'date', 'from', 'theme', 'inviteCode', 'members'])
+          && (
+            !('members' in changed())
+            // leave: take only yourself off (the owner can't leave their own book)
+            || (me() != resource.data.owner && newMembers() == oldMembers().difference([me()].toSet()))
+            // the owner removes people, never themselves
+            || (me() == resource.data.owner && oldMembers().hasAll(newMembers()) && resource.data.owner in request.resource.data.members)
+          );
+      }
+      function joining() {
+        return !(me() in resource.data.members)
+          && changed().hasOnly(['members', 'joinWith'])
+          && request.resource.data.joinWith == resource.data.inviteCode
+          && newMembers() == oldMembers().union([me()].toSet());
+      }
+
+      match /pages/{pageId} {
+        allow read: if isMember(bookId);
+        allow create, update: if isMemberAfter(bookId)
+          && request.resource.data.type in ['letter', 'polaroid', 'duo', 'collage', 'list', 'blank', 'film', 'grid', 'ticket', 'notes', 'quote']
+          && request.resource.data.order is number;
+        allow delete: if isMember(bookId);
+      }
+
+      match /stickers/{stickerId} {
+        allow read: if isMember(bookId);
+        allow create, update: if isMemberAfter(bookId)
+          && request.resource.data.kind in ['photo', 'doodle', 'word', 'tape']
+          && request.resource.data.page is string;
+        allow delete: if isMember(bookId);
+      }
+
+      // Photos are shrunk on the device and stored as JPEG data. They're never
+      // changed, because pages and stickers point at them.
+      match /photos/{photoId} {
+        allow read: if isMember(bookId);
+        allow create: if isMemberAfter(bookId)
+          && request.resource.data.data is string
+          && request.resource.data.data.size() < 1000000;
+        allow update: if false;
+        allow delete: if signedIn() && bookData(bookId).owner == me();
+      }
+    }
+  }
+}

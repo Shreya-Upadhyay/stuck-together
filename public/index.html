@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>stuck together ♡ scrapbooks made with friends</title>
+  <meta name="description" content="Make flippable scrapbooks with your friends: for a birthday, a trip, a whole year, or just the group.">
+  <meta name="theme-color" content="#EFE7DC">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%8E%80%3C/text%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Nunito:wght@600;700;800&family=Special+Elite&display=swap">
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="/app.css">
+</head>
+<body class="home">
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+    <defs>
+      <pattern id="bw" width="7" height="7" patternUnits="userSpaceOnUse">
+        <rect width="7" height="7" fill="#F6F0E7"/><rect width="3.5" height="7" fill="#2B2522" opacity=".5"/><rect width="7" height="3.5" fill="#2B2522" opacity=".5"/>
+      </pattern>
+    </defs>
+  </svg>
+
+  <main class="home-wrap">
+    <div class="home-top">
+      <a class="wordmark" href="/">stuck together</a>
+      <div class="account" id="account"></div>
+    </div>
+
+    <!-- signed out -->
+    <section id="signed-out" hidden>
+      <div class="hero-board">
+        <div class="hero-kraft">
+          <span class="tape" style="left:8%;top:-2%;transform:rotate(-8deg);--c:#D6A39D"></span>
+          <span class="tape" style="right:6%;bottom:6%;transform:rotate(-20deg);--c:#AAB597"></span>
+          <div class="bow" id="hero-bow" style="right:6%;top:6%;width:17%"></div>
+          <h1 class="hero-title" id="hero-title" aria-label="stuck together"></h1>
+          <p class="hero-sub">flippable scrapbooks you make with your friends: for someone's birthday, a trip, a whole year, or just the group. everyone adds photos, notes and stickers.</p>
+        </div>
+      </div>
+      <div class="signin-card" style="margin-top:40px">
+        <span class="tape" style="left:40%;top:-12px;transform:rotate(-2deg);--c:#EAD9A8"></span>
+        <div id="signin"></div>
+      </div>
+      <section class="how" aria-labelledby="how-h" style="margin-top:40px">
+        <h2 id="how-h" class="label" style="position:relative">how it works</h2>
+        <ol>
+          <li><b>start a scrapbook</b> for a person, a trip, a year, or the group itself.</li>
+          <li><b>send the invite link</b> to the group chat. friends sign in and they're in.</li>
+          <li><b>fill it together</b> with photos, tickets, letters, lists and stickers. everyone sees changes live.</li>
+          <li><b>keep adding to it</b> whenever something happens, or give it to the person it's for.</li>
+        </ol>
+      </section>
+    </section>
+
+    <!-- signed in -->
+    <section id="signed-in" hidden>
+      <div class="shelf-head">
+        <h2>your scrapbooks</h2>
+      </div>
+      <div class="shelf" id="shelf" style="margin-top:22px"></div>
+    </section>
+  </main>
+
+  <!-- new scrapbook -->
+  <section class="sheet" id="new-sheet" hidden aria-label="New scrapbook">
+    <div class="sheet-head">
+      <h2 class="sheet-title">a new scrapbook</h2>
+      <button class="x" data-close aria-label="Close">&times;</button>
+    </div>
+    <form class="form" id="new-form">
+      <fieldset class="field">
+        <legend>what's it about?</legend>
+        <div class="kind-grid" id="kinds"></div>
+      </fieldset>
+      <div class="form" id="kind-fields"></div>
+      <fieldset class="field">
+        <legend>the paper</legend>
+        <div class="swatches" id="themes"></div>
+      </fieldset>
+      <button class="pill primary big" type="submit" id="new-btn">make it</button>
+    </form>
+  </section>
+
+  <div class="toast" id="toast" hidden></div>
+  <script type="module" src="/js/home.js"></script>
+</body>
+</html>

@@ -1,0 +1,9 @@
+# not part of the site
+dev-server.mjs
+README.md
+firestore.rules
+firestore.indexes.json
+firebase.json
+.firebaserc
+.firebase
+*.log
