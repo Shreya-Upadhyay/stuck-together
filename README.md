@@ -42,5 +42,5 @@ All your scrapbooks live on your shelf at the home page.
 
 ---
 
-Made by Shreya Upadhyay. Page turning by
+Page turning by
 [StPageFlip](https://github.com/Nodlik/StPageFlip) (MIT, see `public/vendor/page-flip-LICENSE`).

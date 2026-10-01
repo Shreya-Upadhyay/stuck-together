@@ -2,3 +2,7 @@ node_modules
 .vercel
 .firebase
 *.log
+
+# project-specific Firebase details stay on this computer
+public/js/firebase-config.js
+.firebaserc
