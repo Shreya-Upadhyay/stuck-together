@@ -1,80 +1,46 @@
 # stuck together 🎀
 
-Flippable scrapbooks you make with your friends. Sign in, start a scrapbook, send the
-invite link to the group chat, and everyone adds photos, letters, lists and stickers.
-Changes show up live for everyone.
+**Flippable scrapbooks you make with your friends.**
 
-Live at **https://stuck-together.vercel.app**
+### → [stuck-together.vercel.app](https://stuck-together.vercel.app)
 
-- **Any kind of book:** for a person (a birthday, a goodbye), a trip, a year or season,
-  or an ongoing book for the group. Each starts with its own set of pages.
-- **Your shelf:** every scrapbook you're in, on one page
-- **11 page layouts:** letter, one photo, two photos + clipping, collage, list, blank,
-  film strip, photo grid, ticket stub, notes wall, quote
-- **5 papers:** kraft, blush, noir, sky, sage
-- **Stickers:** your photos cut into hearts, stars and scallops, 27 doodles, washi tape,
-  and word stickers in typewriter, tape or cut-out letters
-- **Friends:** invite links, a member list, and a new link whenever you want to turn off
-  the old one
+Make a scrapbook for someone's birthday, a trip, a whole year, or just the group, then
+fill it together. Everyone adds photos, letters, lists and stickers, and sees each
+other's changes live.
 
-Plain HTML, CSS and JavaScript on Firebase (Auth + Firestore). No build step.
+## How to use it
 
-## How access works
+1. **Sign in** with Google, or get a sign-in link by email. No passwords.
+2. **Start a scrapbook** and pick what it's about:
+   - **a person:** a birthday, a goodbye, a thank you
+   - **a trip:** a weekend away, a road trip, a holiday
+   - **a year or season:** 2026, last summer, senior year
+   - **just us:** an ongoing book for the group
+3. **Pick the paper:** kraft, blush, noir, sky or sage.
+4. **Invite your friends:** tap **friends** and send the invite link to the group chat.
+   They sign in and they're in.
+5. **Fill it together:**
+   - click any words to change them
+   - tap **add photo** on any frame
+   - **+ page** adds a letter, photos, a film strip, a photo grid, a ticket stub, a list,
+     a notes wall, a quote, or a blank page
+   - **stickers** has your photos cut into hearts and stars, doodles, washi tape and
+     word stickers. Drag them anywhere.
+6. **Flip through it** by dragging a page corner, or with the arrows.
 
-- Everyone signs in with Google or an emailed sign-in link. No passwords.
-- A scrapbook can only be opened by its members. The invite link adds whoever signs in
-  with it; making a new link turns the old one off.
-- Every member can edit everything. Anyone can leave. Only the person who made a
-  scrapbook can remove members or delete it.
-- Photos are shrunk on the device (about 1400px) and stored in Firestore, so no paid
-  Firebase plan is needed.
+All your scrapbooks live on your shelf at the home page.
 
-The rules that enforce this are in [`firestore.rules`](firestore.rules).
+## Who can see a scrapbook
 
-## Set up your own copy
+- Only people in it. Nobody can browse or search other people's scrapbooks.
+- Anyone you send the invite link to can join and change everything, so only send it to
+  people you'd hand the real thing to.
+- Tap **make a new link** to turn off an old invite link.
+- The person who made a scrapbook can remove people or delete it. Anyone else can leave.
+- Photos are shrunk before they're uploaded, so they look great in the book but aren't
+  full resolution. Keep your originals.
 
-1. **Create a Firebase project** at https://console.firebase.google.com (the free Spark
-   plan is fine).
-2. **Sign-in:** Build → Authentication → Get started. Enable **Google**, and enable
-   **Email/Password** with **Email link (passwordless sign-in)** turned on.
-3. **Database:** Build → Firestore Database → Create database (production mode).
-4. **Web app config:** Project settings → Your apps → Web (`</>`). Copy the config values
-   into [`public/js/firebase-config.js`](public/js/firebase-config.js), replacing the ones
-   there (they point at the live site's project), and put your project ID in `.firebaserc`.
-5. **Rules:** publish `firestore.rules` and `firestore.indexes.json`:
+---
 
-   ```bash
-   npx firebase-tools login
-   npx firebase-tools use --add
-   npm run rules
-   ```
-
-   (Or paste `firestore.rules` into Firestore → Rules in the console.)
-6. **Run it locally:**
-
-   ```bash
-   npm run dev
-   ```
-
-   Open http://localhost:5180.
-7. **Deploy** to [Vercel](https://vercel.com):
-
-   ```bash
-   npx vercel --prod
-   ```
-
-   Then add your site's domain (e.g. `your-site.vercel.app`) under Firebase →
-   Authentication → Settings → **Authorized domains**, or sign-in won't work there.
-
-## Limits
-
-- Firestore's free tier includes about 1 GB of storage and 50,000 reads a day. That's a
-  lot of scrapbooks for friend groups, but books full of photos use it up faster.
-- Up to 50 people per scrapbook.
-- Anyone can sign up and start scrapbooks. If spam ever becomes a problem, turn on
-  Firebase App Check.
-
-## Credits
-
-Page turning by [StPageFlip](https://github.com/Nodlik/StPageFlip) (MIT, see
-`public/vendor/page-flip-LICENSE`).
+Made by Shreya Upadhyay. Page turning by
+[StPageFlip](https://github.com/Nodlik/StPageFlip) (MIT, see `public/vendor/page-flip-LICENSE`).
