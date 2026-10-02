@@ -118,18 +118,20 @@
 .shelf-head h2 { margin: 0; font: italic 600 34px/1 var(--serif); }
 .shelf { display: grid; grid-template-columns: repeat(auto-fill, minmax(165px, 1fr)); gap: 28px 22px; }
 .mini-cover {
-  position: relative; aspect-ratio: 3 / 4; container-type: inline-size; text-decoration: none; color: var(--ink);
+  position: relative; aspect-ratio: 3 / 4; width: 100%; text-decoration: none; color: var(--ink);
   background-color: var(--pg-hard); background-image: var(--noise); border-radius: 2px 6px 6px 2px;
   box-shadow: inset 6px 0 0 rgba(0,0,0,.1), 0 10px 22px var(--shadow);
-  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5cqw;
-  padding: 10cqw 8cqw; transform: rotate(var(--rot, 0deg)); transition: transform .18s;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px;
+  padding: 18px 14px; transform: rotate(var(--rot, 0deg)); transition: transform .18s;
 }
+/* Fixed sizes here: container units resolve to 0 inside these grid cards. */
 .mini-cover:hover, .mini-cover:focus-visible { transform: rotate(0deg) translateY(-4px); }
-.mini-cover .ransom-title { display: grid; gap: 3cqw; justify-items: center; }
-.mini-cover .ransom span { font-size: 11cqw; min-width: 9cqw; }
-.mini-cover .for { background: var(--label); color: var(--label-text); font: 400 6.4cqw/1.2 var(--type); padding: .35em .7em; max-width: 90%; overflow-wrap: anywhere; text-align: center; }
+.mini-cover .ransom-title { display: grid; gap: 5px; justify-items: center; }
+.mini-cover .ransom { gap: 1px; flex-wrap: nowrap; }
+.mini-cover .ransom span { font-size: 15px; min-width: 12px; padding: .12em .22em .06em; }
+.mini-cover .for { background: var(--label); color: var(--label-text); font: 400 12px/1.2 var(--type); padding: .35em .7em; max-width: 90%; overflow-wrap: anywhere; text-align: center; }
 .theme-noir.mini-cover .for { background: var(--cream); color: var(--ink); }
-.mini-cover .avatars { position: absolute; bottom: 6cqw; right: 6cqw; }
+.mini-cover .avatars { position: absolute; bottom: 10px; right: 10px; }
 .new-book {
   aspect-ratio: 3 / 4; border: 2px dashed var(--ink-soft); border-radius: 6px; background: rgba(250, 245, 236, .5);
   display: grid; place-content: center; gap: 6px; text-align: center; font: 700 26px/1 var(--hand); color: var(--ink); padding: 12px;
@@ -148,3 +150,7 @@
 .kind-card:hover { background: #fff; transform: rotate(-1deg); }
 .kind-card[aria-pressed="true"] { background: var(--label); border-color: var(--label); }
 .kind-card[aria-pressed="true"] b, .kind-card[aria-pressed="true"] span { color: var(--label-text); }
+
+/* The book page has a top bar, so leave room for it plus the page arrows and the sticker button. */
+body.editing .book-wrap { max-width: min(1040px, calc((100dvh - 270px) * 1.5)); }
+@media (max-width: 560px) { body.editing .book-wrap { max-width: max(260px, calc((100dvh - 270px) * .75)); } }
